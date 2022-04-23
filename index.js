@@ -18,6 +18,13 @@ async function run() {
   try {
     await client.connect();
     const userCollection = client.db("foodExpress").collection("user");
+    // SINGLE USER DETAILS
+    app.get("/user/:id", async (req, res) => {
+      id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await userCollection.findOne(query);
+      res.send(result);
+    });
     // GET USER
     app.get("/user", async (req, res) => {
       const query = {};
@@ -30,6 +37,22 @@ async function run() {
       const user = req.body;
       console.log(user);
       const result = await userCollection.insertOne(user);
+      res.send(result);
+    });
+    // UPDATE USER
+    app.put("/user/:id", async (req, res) => {
+      const id = req.params.id;
+      const updateUser = req.body;
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          // name: updateUser.name,
+          // email: updateUser.email
+          updateUser,
+        },
+      };
+      const result = await userCollection.updateOne(filter, updateDoc, options);
       res.send(result);
     });
     // DELETE USER
