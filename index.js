@@ -46,11 +46,12 @@ async function run() {
       const filter = { _id: ObjectId(id) };
       const options = { upsert: true };
       const updateDoc = {
-        $set: {
-          // name: updateUser.name,
-          // email: updateUser.email
-          updateUser,
-        },
+        // $set: {
+        //   // name: updateUser.name,
+        //   // email: updateUser.email
+        //   updateUser,
+        // },
+        $set: updateUser,
       };
       const result = await userCollection.updateOne(filter, updateDoc, options);
       res.send(result);
@@ -71,9 +72,6 @@ run().catch(console.dir);
 app.get("/", (req, res) => {
   res.send("Mongo Db first website");
 });
-// userName: dbusername01
-// password: PwoyUhdkoLH4EGnR
-
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
